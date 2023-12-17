@@ -11,13 +11,13 @@ def create_video_opencv(message: str):
 
     # создание названия для видео
     if len(message) > 50:
-        title = transliterate.slugify(message[:50])
+        title = message[:50]
     elif len(message) == 0:
         title = 'empty-video'
     else:
-        # ъ использован для работы и с латинскими символами
-        title = transliterate.slugify('ъ' + message)
-
+        title = message
+    # ъ использован для работы и с латинскими символами
+    title = transliterate.slugify('ъ' + title)
     # Размеры видео (ширина x высота)
     width, height = 1920, 1080
     # Задаём параметры - видеопоток с частотой 24 кадра в секунду
