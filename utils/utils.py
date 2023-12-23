@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import transliterate
+import movis as mv
 
 
 def create_video_opencv(message: str):
@@ -21,7 +22,7 @@ def create_video_opencv(message: str):
     # Размеры видео (ширина x высота)
     width, height = 1920, 1080
     # Задаём параметры - видеопоток с частотой 24 кадра в секунду
-    out = cv2.VideoWriter(f"{title}.mp4", cv2.VideoWriter_fourcc(*'mp4v'), 24, (width, height))
+    out = cv2.VideoWriter(f"media/videos/{title}.mp4", cv2.VideoWriter_fourcc(*'XVID'), 24, (width, height))
     # Создаем кадр с черным фоном
     frame = np.zeros((height, width, 3), dtype=np.uint8)
 
@@ -52,12 +53,11 @@ def create_video_opencv(message: str):
     # Закрываем видеопоток
     out.release()
 
-
-def main():
-    message = input('Введите текст бегущей строки: ')
-    create_video_opencv(message)
+    return {'title': title, 'path': f"videos/{title}.mp4"}
 
 
-if __name__ == '__main__':
-    main()
-
+def convert_to_h264(file):
+    intro = mv.layer.Video(file)
+    scene = mv.layer.Composition(size=(1920, 1080), duration=0.1)
+    masdin = mv.concatenate([intro, scene])
+    masdin.write_video(file)
